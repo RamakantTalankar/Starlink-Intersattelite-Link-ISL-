@@ -1,0 +1,111 @@
+import java.util.*;
+
+public class Starlink {
+	static int origin,end,LEOidOrigin, LEOidEnd;
+	
+	public static class Constellation{
+		int listGroundStationID[]= {0,1,2,3,4,5,6,7,8,9};
+		int listSatelliteID[]= {0,1,2,3,4};
+		
+		public void showConstellation(){
+	       System.out.println("Active Ground Stations: ");
+	       for(int i=0;i<=9;i++){
+	           System.out.println("Ground Station "+ listGroundStationID[i]);
+	       }
+	       System.out.println("Active LEO satellites: ");
+	       for(int i=0;i<=4;i++){
+	           System.out.println("LeoSat "+listSatelliteID[i]);
+	        }
+	    }
+	}
+	static class Satellite extends Constellation{
+		public int getNextID(int id){
+			int nextID = id*2;
+			return(nextID);
+				
+		}
+	}
+	interface Communications{
+		
+		void sendMessage();
+	}
+		
+	static class LEOSatellite extends Satellite implements Communications{
+		@Override
+		public void sendMessage() {
+			
+		
+		   if(origin==0||origin==1) { 
+		       LEOidOrigin = listSatelliteID[0];
+		       
+		   }
+		   else if(origin==2||origin==3) {
+		       LEOidOrigin = listSatelliteID[1];
+		       
+		   }
+		   else if(origin==4||origin==5) { 
+		       LEOidOrigin = listSatelliteID[2];
+		       
+		   }
+		   else if(origin==6||origin==7) { 
+		       LEOidOrigin = listSatelliteID[3];
+		    
+		   }
+		   else if(origin==8||origin==9) { 
+		    LEOidOrigin = listSatelliteID[4];
+		    
+		   }
+		   System.out.println("Message sent from Ground Station "+origin+" to LEO "+LEOidOrigin);
+		   
+		   if(end==0||end==1) 
+		            LEOidEnd = listSatelliteID[0];
+		   else if(end==2||end==3) 
+		            LEOidEnd = listSatelliteID[1];
+		   else if(end==4||end==5) 
+		            LEOidEnd = listSatelliteID[2];
+		   else if(end==6||end==7) 
+		            LEOidEnd = listSatelliteID[3];
+		            
+		   else if(end==8||end==9) 
+		            LEOidEnd = listSatelliteID[4];
+		    if(LEOidOrigin==LEOidEnd) {
+		    	 System.out.println("Message sent from LEO "+LEOidOrigin+" to Ground Station "+end); 
+		     }
+		    else if (LEOidOrigin - LEOidEnd == 1 || LEOidEnd - LEOidOrigin == 1) {
+		    	System.out.println("Message sent from LEO "+LEOidOrigin+" to LEO "+LEOidEnd);
+		    	System.out.println("Message sent from LEO "+LEOidEnd+" to Ground Station "+end); 
+		    }
+		    else{
+		    	 System.out.println("Message sent from LEO "+LEOidOrigin+" to GSO");
+		    	 System.out.println("Message sent from GSO to LEO "+LEOidEnd);
+		    	 System.out.println("Message sent from LEO "+LEOidEnd+" to Ground Station "+end);
+		     }
+		
+			
+		}
+	}
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n;
+		System.out.println("Enter number of messages to be sent: ");
+		n=sc.nextInt();
+		for(int a=0;a<n;a++) {
+        System.out.println("Enter Origin ID and End ID");
+        origin = sc.nextInt();
+        if(origin<0||origin>9) {
+        	System.err.println("Invalid input: Ground Station index can only be between 0 and 9.");
+        	System.exit(1);
+        }
+        end = sc.nextInt();
+        if(end<0||end>9) {
+        	System.err.println("Invalid input: Ground Station index can only be between 0 and 9.");
+        	System.exit(1);
+        }
+        	Constellation objc = new Constellation();
+        objc.showConstellation();
+        LEOSatellite obj = new LEOSatellite();
+        obj.sendMessage();
+		}
+	sc.close();
+	}
+}
